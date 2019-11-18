@@ -1,0 +1,68 @@
+
+
+{
+  "portal_name": "immobilienportal",
+  "desc": "this repox contains all network policies for the immobilienportal",
+  "environ": "default_openshift",
+  "dry_run": "false",
+  "generate_labels": "false",
+  "zones": [
+   {
+    "own_zone": "immobilienportal-portal-UI",
+    "desc": "who is allowed to access the immobilienportal UI zone...only the openshift router zone",
+    "namespaces": [
+       "immobilienportal-routing1"
+    ],
+    "allow_from_zones": [
+       "openshift-router"
+    ],
+    "claim_zones": [
+       "openshift_logging_monitoring",
+       "openshift_cas"
+    ]
+   },
+   {
+    "own_zone": "immobilienportal-portal",
+    "desc": "this contains all accepted zones who are allowed to access the immobilienportal portal zone",
+    "namespaces": [
+       "immobilienportal-portal_gateway1",
+       "immobilienportal-portal_registry1",
+       "immobilienportal-portal_consul1"
+    ],
+    "allow_from_zones": [
+       "immobilienportal-portal-UI"
+    ],
+    "claim_zones": [
+       "openshift_logging_monitoring",
+       "openshift_cas"
+    ]
+   },
+   {
+    "own_zone": "immobilienportal-bounded-contexts",
+    "desc": "who dares to access the actual bounded contexts or services",
+    "namespaces": [
+       "immobilienportal-service1",
+       "immobilienportal-service2",
+       "immobilienportal-service3",
+       "immobilienportal-service4"
+    ],
+    "allow_from_zones": [
+       "immobilienportal-portal"
+    ],
+    "claim_zones": [
+       "openshift_logging_monitoring",
+       "openshift_cas"
+    ]
+   }
+  ],
+  "custom_policies": [
+    {
+      "namespace": "immobilienportal-portal_consul1",
+      "desc": "custom rules to allow other access to the consul namespace",
+      "label": "allow_from_namespace_immobilienportal-portal_consul1",
+      "allow_namespaces" : [
+         "immobilienportal-service4"
+      ]
+    }
+  ]
+}

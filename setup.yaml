@@ -1,0 +1,50 @@
+---
+# one file maps to one portal definition
+- name: immobilienportal
+  desc: immo portal portal consists of three zones
+  srvs_domain: .ika-dolores.de
+  zones:
+    - name: portal-ui
+      type: entrance_proxy
+      header: Welcome to Immobilien Portal
+      desc: this is the immobilienportal Portal UI zone
+      zone: portal-ui
+      member_ns:
+        - name: portal_ui1
+          type: websrv
+        - name: portal_ui2
+          type: websrv
+        - name: portal_ui3
+          type: websrv
+      access_to_zone:
+        - portal
+    - name: portal
+      type: webserver
+      desc: lorem ipsum
+      zone: portal
+      member_ns:
+        - name: portal1
+          type: websrv
+        - name: portal2
+          type: websrv
+        - name: portal3
+          type: websrv
+      access_to_zone:
+        - bounded-contexts
+    - name: bounded-contexts
+      type: webservice
+      desc: lorem ipsum
+      zone: bounded-contexts
+      member_ns:
+        - name: bc1
+          type: websrv
+        - name: bc2
+          type: websrv
+        - name: bc3
+          type: websrv
+        - name: db1
+          type: computing
+        - name: redis1
+          type: redis
+      access_from_zone:
+        - portal
